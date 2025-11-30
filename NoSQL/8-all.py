@@ -1,11 +1,21 @@
 #!/usr/bin/env python3
-""" 8-main """
-from pymongo import MongoClient
-list_all = __import__('8-all').list_all
+"""
+this module defines a function that lists all documents in a collection.
+"""
 
-if __name__ == "__main__":
-    client = MongoClient('mongodb://127.0.0.1:27017')
-    school_collection = client.my_db.school
-    schools = list_all(school_collection)
-    for school in schools:
-        print("[{}] {}".format(school.get('_id'), school.get('name')))
+
+def list_all(mongo_collection):
+    """
+    lists all documents in a MongoDB collection.
+
+    args:
+        mongo_collection: The pymongo collection object to query.
+
+    returns:
+        A list of documents (dictionaries), or an empty list if none found.
+    """
+    # The .find() method in PyMongo returns a Cursor object (an iterator).
+    # We can convert this cursor directly into a list.
+    # If the collection is empty, find() returns an empty cursor,
+    # and list(cursor) becomes [].
+    return list(mongo_collection.find())
